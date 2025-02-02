@@ -1,0 +1,13 @@
+name = "ES2025_Thesis"
+uuid = "2e2c4fb9-ef48-4642-b9b9-ce3637e84172"
+authors = ["Eli Cheam Shapiro <161320201+elicheamshapiro@users.noreply.github.com> and contributors"]
+version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+julia = "1"
+
+[targets]
+test = ["Test"]
