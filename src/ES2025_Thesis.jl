@@ -66,6 +66,7 @@ function run()
     include("./src/section_2/1_data_preparation_2.jl")
     include("./src/section_2/2_usa_debt_service_payments.jl")
     include("./src/section_2/3_usa_delinquency_rates.jl")
+    include("./src/section_2/4_usa_lending_standards.jl")
     println("Generated Figures and Tables for Section 2")
 
     # Section 3 Modelling Austerity and Private Debt

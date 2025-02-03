@@ -95,7 +95,7 @@ p2_8 = plot(horizon, irf_values, label="IRF", lw=2, color=:blue, xlabel="Horizon
     plot!(horizon, lower_bound_1, fill_between=(lower_bound_1, upper_bound_1), color=:deepskyblue, alpha=0.2, label="90% CI")
 
 ################################### Combine Plots ###################################
-debt_service = plot(p2_5, p2_6, p2_7, p2_8, layout=(2, 3), size=(1000, 800),bottom_margin=10mm, legend = false)
+debt_service = plot(p2_5, p2_6, p2_7, p2_8, layout=(2, 2), size=(1000, 800),bottom_margin=10mm, legend = false)
     savefig(debt_service, "./output/figure_M.png")
 
 println("USA Debt Service Payments As Percent of Disposable Income IRFs Completed")
