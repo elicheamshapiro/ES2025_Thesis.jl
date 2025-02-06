@@ -8,7 +8,7 @@ paneldf!(panel_df,:iso,:year)
 ###################### Baseline w/ Real Private Sector Debt 2L, 2C ######################
 
 # Perform the local projection with cumulative effects and IV estimation
-r1 = lp(panel_df, Cum(:drprv), xnames=Cum(:dCAPB), wnames=(:drprv, :dCAPB),
+r1 = lp(panel_df, Cum(:drprv), xnames=Cum(:dCAPB), wnames=(:drprv, :dCAPB, :stir),
     iv=Cum(:dCAPB)=>:size, nlag=2, nhorz=5, addylag=false, firststagebyhorz=true,
     panelid=:iso, vce=cluster(:iso), fes=(:iso), states= nothing)
 f1 = irf(r1, Cum(:drprv), Cum(:dCAPB))

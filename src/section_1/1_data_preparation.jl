@@ -96,5 +96,5 @@ CSV.write("./output/panel_df.csv", panel_df)
 
 println("Data Preparation Completed")
 
-vars_df = names(panel_df)
-println(vars_df) 
+# vars_df = names(panel_df)
+# println(vars_df) 
