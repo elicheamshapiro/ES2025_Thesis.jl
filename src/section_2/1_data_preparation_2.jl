@@ -81,12 +81,26 @@ usa_df.dls_small_firm = lagdiff(usa_df.DRTSCIS)  #Bank Commercial and Industrial
 usa_df.dls_hh = lagdiff(usa_df.SUBLPDMHSXWBNQ)  #Bank Loans to Households
 
 # Generate first difference lending_rates
-panel_df.dlr = lagdiff(panel_df.lending_rate) # Bank lending rate
-panel_df.dlrp = lagdiff(panel_df.risk_premium) # Bank risk premium
-panel_df.dnpl = lagdiff(panel_df.non_performing_loans) # Non-performing loans
+panel_df.dlrp = lagdiff(panel_df.risk_premium*100) # Bank risk premium
+panel_df.dnpl = lagdiff(panel_df.non_performing_loans*100) # Non-performing loans
+
+# Generate first differences of asset returns
+panel_df.drisky_tr = lagdiff(panel_df.risky_tr)
+panel_df.dsafe_tr = lagdiff(panel_df.safe_tr)
+panel_df.dcapital = lagdiff(panel_df.capital_tr)
+panel_df.dhousing_tr = lagdiff(panel_df.housing_tr)
+panel_df.deq_tr = lagdiff(panel_df.eq_tr)
+panel_df.dhpnom = lagdiff(log.(panel_df.hpnom) - log.(panel_df.cpi))*100
+panel_df.dbill_rate = lagdiff(panel_df.bill_rate)
+panel_df.bond_tr = lagdiff(panel_df.bond_tr)
+panel_df.deq_div_rtn = lagdiff(panel_df.eq_div_rtn)
+
+#Generate first difference of income and unemployment indicators
+
+
 
 #Drop values for 1978 for these first difference variables
-variables = [:dlr, :dlrp, :dnpl]
+variables = [ :dlrp, :dnpl]
 for v in variables
     panel_df[panel_df.year .== 1978, v] .= missing
 end
@@ -95,7 +109,7 @@ end
 CSV.write("./data/panel_df.csv", panel_df)
 CSV.write("./output/panel_df.csv", panel_df)
 
-# vars_df = names(panel_df)
-# println(vars_df)
+vars_df = names(panel_df)
+println(vars_df)
 
 println("Section 2 Data Preparation Completed")
