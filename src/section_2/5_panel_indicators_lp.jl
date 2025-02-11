@@ -3,29 +3,6 @@ println("Beginning Section 2 Panel Credit Market Inidcators IRFs")
 ################################### Load Data ###################################
 panel_df = CSV.read("./output/panel_df.csv", DataFrame)
 
-################################### Bank Lending Rates ###################################
-
-# Perform the local projection with cumulative effects and IV estimation
-r1 = lp(panel_df, Cum(:dlr), xnames=Cum(:dCAPB), wnames=(:dlr, :dCAPB, :dlrgdpmad, :y_gap),
-    iv=Cum(:dCAPB)=>:size, nlag=2, nhorz=5, addylag=false, firststagebyhorz=true, states= nothing)
-f1 = irf(r1, Cum(:dlr), Cum(:dCAPB))
-
-# Extract the IRF results
-horizon = 0:4
-irf_values = f1.B
-lower_bound_1 = f1.B - 1.64 .* f1.SE
-upper_bound_1 = f1.B + 1.64 .* f1.SE
-lower_bound_2 = f1.B - 1.96 .* f1.SE
-upper_bound_2 = f1.B + 1.96 .* f1.SE
-y_min = min(minimum(lower_bound_2).-1 , 0.0) 
-y_max = max(maximum(upper_bound_2).+1 , 0.0)
-
-# Plotting with adjusted y-axis
-p2_17 = plot(horizon, irf_values, label="IRF", lw=2, color=:blue, xlabel="Horizon", ylabel="Response (Base Points)", 
-     title="Bank Lending Rates", ylim=(y_min, y_max), legend = false)
-    plot!(horizon, lower_bound_2, fill_between=(lower_bound_2, upper_bound_2), color=:lightblue, alpha=0.3, label="95% CI")
-    plot!(horizon, lower_bound_1, fill_between=(lower_bound_1, upper_bound_1), color=:deepskyblue, alpha=0.2, label="90% CI")
-
 ################################### Lending Risk Premium ###################################
 
 # Perform the local projection with cumulative effects and IV estimation

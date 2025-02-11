@@ -100,7 +100,7 @@ panel_df.deq_div_rtn = lagdiff(panel_df.eq_div_rtn)
 
 
 #Drop values for 1978 for these first difference variables
-variables = [ :dlrp, :dnpl]
+variables = [:dlrp, :dnpl]
 for v in variables
     panel_df[panel_df.year .== 1978, v] .= missing
 end
