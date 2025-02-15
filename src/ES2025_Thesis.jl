@@ -69,6 +69,7 @@ function run()
     include("./src/section_2/4_usa_lending_standards.jl")
     include("./src/section_2/5_panel_indicators_lp.jl")
     include("./src/section_2/6_panel_asset_returns_lp.jl")
+    include("./src/section_2/7_panel_savings_lp.jl")
     println("Generated Figures and Tables for Section 2")
 
     # Section 3 Modelling Austerity and Private Debt

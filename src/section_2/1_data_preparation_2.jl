@@ -11,9 +11,40 @@ ls_df = DataFrame(CSV.File("./data/lending_standards.csv"))
 lr_df = DataFrame(CSV.File("./data/lending_rates.csv"))
 lrp_df = DataFrame(CSV.File("./data/lending_risk.csv"))
 npl_df = DataFrame(CSV.File("./data/non_performing.csv"))
+gs_df = DataFrame(CSV.File("./data/gs_gdp.csv"))
+di_df = DataFrame(CSV.File("./data/dep_rate.csv"))
+gs_lcu_df = DataFrame(CSV.File("./data/gs_lcu.csv"))
 
 # Reshape the data from wide to long format for World Bank data
-# variables = [:lending_rate, :risk_premium, :non_performing]
+long_df = stack(gs_lcu_df, Not(["Country Name", "Country Code", "Indicator Name", "Indicator Code"]), 
+                variable_name = :year, value_name = :gs_lcu)
+long_df.country = long_df."Country Name"
+long_df.iso = long_df."Country Code"
+long_df = long_df[:, [:year, :country, :gs_lcu]]
+years = 1960:2023
+long_df.year = repeat(collect(years), inner = 266)
+panel_df = innerjoin(panel_df, long_df, on = [:country, :year], makeunique=true)
+panel_df = sort(panel_df, [:country, :year])
+
+long_df = stack(gs_df, Not(["Country Name", "Country Code", "Indicator Name", "Indicator Code"]), 
+                variable_name = :year, value_name = :gs_gdp)
+long_df.country = long_df."Country Name"
+long_df.iso = long_df."Country Code"
+long_df = long_df[:, [:year, :country, :gs_gdp]]
+years = 1960:2023
+long_df.year = repeat(collect(years), inner = 266)
+panel_df = innerjoin(panel_df, long_df, on = [:country, :year], makeunique=true)
+panel_df = sort(panel_df, [:country, :year])
+
+long_df = stack(di_df, Not(["Country Name", "Country Code", "Indicator Name", "Indicator Code"]), 
+                variable_name = :year, value_name = :dep_rate)
+long_df.country = long_df."Country Name"
+long_df.iso = long_df."Country Code"
+long_df = long_df[:, [:year, :country, :dep_rate]]
+years = 1960:2023
+long_df.year = repeat(collect(years), inner = 266)
+panel_df = innerjoin(panel_df, long_df, on = [:country, :year], makeunique=true)
+panel_df = sort(panel_df, [:country, :year])
 
 long_df = stack(lr_df, Not(["Country Name", "Country Code", "Indicator Name", "Indicator Code"]), 
                 variable_name = :year, value_name = :lending_rate)
@@ -87,7 +118,7 @@ panel_df.dnpl = lagdiff(panel_df.non_performing_loans*100) # Non-performing loan
 # Generate first differences of asset returns
 panel_df.drisky_tr = lagdiff(panel_df.risky_tr)
 panel_df.dsafe_tr = lagdiff(panel_df.safe_tr)
-panel_df.dcapital = lagdiff(panel_df.capital_tr)
+panel_df.dcapital_tr = lagdiff(panel_df.capital_tr)
 panel_df.dhousing_tr = lagdiff(panel_df.housing_tr)
 panel_df.deq_tr = lagdiff(panel_df.eq_tr)
 panel_df.dhpnom = lagdiff(log.(panel_df.hpnom) - log.(panel_df.cpi))*100
@@ -95,12 +126,15 @@ panel_df.dbill_rate = lagdiff(panel_df.bill_rate)
 panel_df.bond_tr = lagdiff(panel_df.bond_tr)
 panel_df.deq_div_rtn = lagdiff(panel_df.eq_div_rtn)
 
-#Generate first difference of income and unemployment indicators
-
-
+# Generate first difference of savings indicators
+panel_df.ddep_rate = lagdiff(panel_df.dep_rate)*100 # Deposit Interest Rate
+panel_df.dgs_gdp = lagdiff(panel_df.gs_gdp)*100 # Gross Savings (Percent of GDP)
+panel_df.dgs_lcu = lagdiff(log.(panel_df.gs_lcu) - log.(panel_df.cpi))*100 # Gross Savings (LCU)
 
 #Drop values for 1978 for these first difference variables
-variables = [:dlrp, :dnpl]
+variables = [:dlrp, :dnpl, :drisky_tr, :dsafe_tr, :dcapital_tr, :dhousing_tr, :deq_tr, :dhpnom, :dbill_rate, :bond_tr, :deq_div_rtn,
+             :ddep_rate, :dgs_gdp, :dgs_lcu]
+
 for v in variables
     panel_df[panel_df.year .== 1978, v] .= missing
 end
@@ -109,7 +143,7 @@ end
 CSV.write("./data/panel_df.csv", panel_df)
 CSV.write("./output/panel_df.csv", panel_df)
 
-vars_df = names(panel_df)
-println(vars_df)
+# vars_df = names(panel_df)
+# println(vars_df)
 
 println("Section 2 Data Preparation Completed")

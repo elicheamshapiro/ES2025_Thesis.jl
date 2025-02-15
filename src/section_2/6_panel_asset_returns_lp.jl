@@ -10,11 +10,11 @@ for v in variables
     panel_df[panel_df.year .== 1978, v] .= missing
 end
 
-panel_df.rrisky_tr = (panel_df.risky_tr .- panel_df.dcpi)* 100
-panel_df.rsafe_tr = (panel_df.safe_tr .- panel_df.dcpi) .* 100
-panel_df.rcapital_tr = (panel_df.capital_tr .- panel_df.dcpi) .* 100
-panel_df.req_tr = (panel_df.eq_tr .- panel_df.dcpi) .* 100
-panel_df.rhousing_tr = (panel_df.housing_tr .- panel_df.dcpi).* 100
+panel_df.rrisky_tr = (panel_df.drisky_tr .- panel_df.dcpi)* 100
+panel_df.rsafe_tr = (panel_df.dsafe_tr .- panel_df.dcpi) .* 100
+panel_df.rcapital_tr = (panel_df.dcapital_tr .- panel_df.dcpi) .* 100
+panel_df.req_tr = (panel_df.deq_tr .- panel_df.dcpi) .* 100
+panel_df.rhousing_tr = (panel_df.dhousing_tr .- panel_df.dcpi).* 100
 
 
 
