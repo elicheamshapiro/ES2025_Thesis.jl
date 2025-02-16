@@ -131,6 +131,9 @@ panel_df.ddep_rate = lagdiff(panel_df.dep_rate)*100 # Deposit Interest Rate
 panel_df.dgs_gdp = lagdiff(panel_df.gs_gdp)*100 # Gross Savings (Percent of GDP)
 panel_df.dgs_lcu = lagdiff(log.(panel_df.gs_lcu) - log.(panel_df.cpi))*100 # Gross Savings (LCU)
 
+# Confidence Indicies
+
+
 #Drop values for 1978 for these first difference variables
 variables = [:dlrp, :dnpl, :drisky_tr, :dsafe_tr, :dcapital_tr, :dhousing_tr, :deq_tr, :dhpnom, :dbill_rate, :bond_tr, :deq_div_rtn,
              :ddep_rate, :dgs_gdp, :dgs_lcu]
